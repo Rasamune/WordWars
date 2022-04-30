@@ -1,0 +1,62 @@
+.main-container {
+  max-width: 1200px;
+  padding: 0 2rem;
+  margin: 0 auto;
+}
+
+.main {
+  background-color: #16181d;
+  height: 80vh;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.play-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 40vh;
+}
+
+.left-column {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.left-column .level {
+  font-weight: 700;
+  color: #4e5565;
+  font-size: 3rem;
+}
+
+.left-column .card {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+  background-color: #282c34;
+  border-radius: 15px;
+  transform: translateY(-100%);
+  transition: all 0.5s ease-out;
+}
+
+.left-column .card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.left-column .card.showing {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.left-column .card .word {
+  font-size: 1.75rem;
+}

@@ -1,0 +1,64 @@
+.type-container .typing-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #282c34;
+  border-radius: 15px;
+  min-height: 20vh;
+  margin: 0 2rem;
+}
+
+.type-container .typing-area .definition {
+  color: #4e5565;
+  margin: 0;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  list-style: none;
+}
+
+.type-container .typing-area .letter {
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+
+.type-container .typing-area .letter.right {
+  color: white;
+}
+
+.type-container .typing-area .letter.wrong {
+  position: relative;
+  color: red;
+}
+
+.type-container .typing-area .letter.wrong.space:after {
+  content: '';
+  position: absolute;
+  left: -0.25rem;
+  bottom: 0;
+  width: 1rem;
+  height: 0.25rem;
+  background-color: red;
+}
+
+.type-timer {
+  display: block;
+  height: 1.5vh;
+  border: 1px solid #4e5565;
+  margin: 1rem 5rem;
+  overflow: hidden;
+}
+
+.type-timer .time-bar {
+  height: 1.5vh;
+  display: block;
+  background-color: white;
+}
+
+.type-timer .time-bar.enter-active {
+  transform: translateX(-100%);
+}
+
+.type-timer .time-bar.enter-done {
+  transform: translateX(-100%);
+}

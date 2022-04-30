@@ -1,0 +1,9 @@
+header {
+  background-color: #282c34;
+}
+
+header .wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
