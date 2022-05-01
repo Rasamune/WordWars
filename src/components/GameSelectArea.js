@@ -1,11 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import classes from './GameSelectArea.module.css';
 
+const difficultyStates = {
+  challenger: false,
+  normal: false,
+  easy: false,
+};
+
 const GameSelectArea = props => {
   const [selected, setSelected] = useState({
-    challenger: false,
-    normal: true,
-    easy: false,
+    ...difficultyStates,
+    [props.difficulty]: true,
   });
 
   const startGameHandler = useCallback(() => {

@@ -14,11 +14,14 @@
 
 .main .gameover-container {
   display: flex;
-  height: 40vh;
+  height: calc(40vh - 2rem);
   align-items: center;
   justify-content: center;
   flex-direction: column;
   color: #4e5565;
+  background-color: #0d0e14;
+  margin: 0 2rem;
+  border-radius: 15px;
 }
 
 .main .gameover {

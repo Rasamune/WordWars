@@ -3,22 +3,26 @@
   padding: 0 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: 100%;
   gap: 0.5rem;
 }
 
-.highscores-container div {
+.highscores-container > div {
   background-color: #0d0e14;
   border-radius: 15px;
+  padding: 1rem;
 }
 
 .highscores-container h1 {
   font-size: 1rem;
   text-align: center;
   color: #4e5565;
+  padding: 0 0 1rem;
 }
 
 .highscores-container ul {
   overflow: hidden;
+  max-height: calc(100% - 3rem);
 }
 
 .highscores-container li {

@@ -26,11 +26,17 @@ const TypingArea = props => {
     timesUp: false,
   });
 
-  let speedProgression = 0.1; // Normal progression
-  if (difficulty === 'challenger') speedProgression = 0.25;
-  if (difficulty === 'easy') speedProgression = 0.05;
+  // let speedProgression = 0.1; // Normal progression
+  // if (difficulty === 'challenger') speedProgression = 0.25;
+  // if (difficulty === 'easy') speedProgression = 0.025;
 
-  const timerLength = typedLetters.length / (2 + level * speedProgression);
+  // const timerLength = typedLetters.length / (2 + level * speedProgression);
+
+  let timerLength = typedLetters.length / (2 + level * 0.1);
+  if (difficulty === 'challenger')
+    timerLength = typedLetters.length / (2 + level * 0.25);
+  if (difficulty === 'easy')
+    timerLength = typedLetters.length / (1.2 + level * 0.1);
 
   const definitionDisplay = () => (
     <>

@@ -191,7 +191,7 @@ const MainView = () => {
             totalWPM: 0,
           },
           combo: -1,
-          difficulty: 'normal',
+          difficulty: gameState.difficulty,
           gameOver: false,
           newGame: true,
         });
@@ -217,7 +217,10 @@ const MainView = () => {
       <div className={classes.main}>
         <div className={classes['play-container']}>
           {gameState.newGame && (
-            <GameSelectArea onStartGame={startGameHandler} />
+            <GameSelectArea
+              difficulty={gameState.difficulty}
+              onStartGame={startGameHandler}
+            />
           )}
           {!gameState.newGame && (
             <>
