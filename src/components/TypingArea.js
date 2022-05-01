@@ -7,22 +7,30 @@ const TypingArea = props => {
   const word = props.gameState.definition.word;
   const definition = props.gameState.definition.sentence;
   const level = props.gameState.level;
+  const combo = props.gameState.combo;
   const invalidKeys = InvalidKeys;
+  const difficulty = props.gameState.difficulty;
+  const timeBarRef = useRef();
+  const timerRef = useRef();
+  const timerStartTimer = useRef();
   const [typedLetters, setTypedLetters] = useState({
     typedRight: '',
     typedWrong: '',
     remaining: definition,
     amountTyped: 0,
+    amountWrong: 0,
+    combo,
     lastKeyPressed: '',
     length: definition.length,
-    wordCount: definition.split(' ').length,
     timerStart: false,
     timesUp: false,
   });
 
-  const timerLength = typedLetters.length / (2 + level * 0.25);
-  const timeBarRef = useRef();
-  const timerRef = useRef();
+  let speedProgression = 0.1; // Normal progression
+  if (difficulty === 'challenger') speedProgression = 0.25;
+  if (difficulty === 'easy') speedProgression = 0.05;
+
+  const timerLength = typedLetters.length / (2 + level * speedProgression);
 
   const definitionDisplay = () => (
     <>
@@ -41,6 +49,57 @@ const TypingArea = props => {
       <li className={`${classes.letter}`}>{typedLetters.remaining}</li>
     </>
   );
+
+  const calculateScores = useCallback(() => {
+    const words = typedLetters.length / 5.5;
+    const time =
+      (new Date().getTime() - new Date(timerStartTimer.current).getTime()) /
+      1000;
+    const wpm = Math.trunc((60 / time) * words);
+
+    let mistakes = typedLetters.amountWrong * 10;
+    if (mistakes > 90) mistakes = 90;
+
+    let currentCombo = typedLetters.combo + 1;
+    if (mistakes > 0) currentCombo = -1;
+
+    let score = 100 - mistakes;
+    if (currentCombo !== -1) score += currentCombo * 25;
+
+    return {
+      wpm: wpm,
+      score,
+      mistakes: typedLetters.amountWrong,
+      combo: currentCombo,
+    };
+  }, [typedLetters]);
+
+  const definitionCompleted = useCallback(() => {
+    const scores = calculateScores();
+    console.log('--- SENTENCE COMPLETED ---');
+    props.onComplete({ word, ...scores });
+  }, [calculateScores, props, word]);
+
+  const definitionFailed = useCallback(() => {
+    console.log('failed');
+    setTimeout(() => {
+      props.onFail();
+    }, 1000);
+  }, [props]);
+
+  const startWordTimer = useCallback(() => {
+    timerStartTimer.current = new Date();
+    timerRef.current = setTimeout(() => {
+      setTypedLetters(prevState => ({
+        ...prevState,
+        typedRight: '',
+        typedWrong: definition,
+        remaining: '',
+        timesUp: true,
+      }));
+      definitionFailed();
+    }, timerLength * 1000);
+  }, [definitionFailed, definition, timerLength]);
 
   const keydownHandler = useCallback(
     e => {
@@ -62,23 +121,9 @@ const TypingArea = props => {
             timerStart: true,
           }));
 
-          if (amountTyped === typedLetters.length) {
-            console.log('Words: ', typedLetters.wordCount);
-            console.log('--- SENTENCE COMPLETED ---');
-            props.onComplete(word);
-          }
+          if (amountTyped === typedLetters.length) definitionCompleted();
 
-          if (!typedLetters.timerStart) {
-            timerRef.current = setTimeout(() => {
-              setTypedLetters(prevState => ({
-                ...prevState,
-                typedRight: '',
-                typedWrong: definition,
-                remaining: '',
-                timesUp: true,
-              }));
-            }, timerLength * 1000);
-          }
+          if (!typedLetters.timerStart) startWordTimer();
 
           return;
         }
@@ -97,24 +142,9 @@ const TypingArea = props => {
             timerStart: true,
           }));
 
-          if (amountTyped === typedLetters.length) {
-            console.log('Words: ', typedLetters.wordCount);
-            console.log('--- SENTENCE COMPLETED ---');
-            props.onComplete(word);
-          }
+          if (amountTyped === typedLetters.length) definitionCompleted();
 
-          if (!typedLetters.timerStart) {
-            timerRef.current = setTimeout(() => {
-              setTypedLetters(prevState => ({
-                ...prevState,
-                typedRight: '',
-                typedWrong: definition,
-                remaining: '',
-                timesUp: true,
-              }));
-            }, timerLength * 1000);
-            console.log(timerRef.current);
-          }
+          if (!typedLetters.timerStart) startWordTimer();
 
           return;
         }
@@ -128,24 +158,14 @@ const TypingArea = props => {
             remaining,
             lastKeyPressed: e.key,
             timerStart: true,
+            amountWrong: typedLetters.amountWrong + 1,
           }));
 
-          if (!typedLetters.timerStart) {
-            timerRef.current = setTimeout(() => {
-              setTypedLetters(prevState => ({
-                ...prevState,
-                typedRight: '',
-                typedWrong: definition,
-                remaining: '',
-                timesUp: true,
-              }));
-            }, timerLength * 1000);
-            console.log(timerRef.current);
-          }
+          if (!typedLetters.timerStart) startWordTimer();
         }
       }
     },
-    [typedLetters, props, word, invalidKeys, timerLength, definition]
+    [startWordTimer, definitionCompleted, typedLetters, invalidKeys]
   );
 
   useEffect(() => {
@@ -162,15 +182,18 @@ const TypingArea = props => {
         typedWrong: '',
         remaining: definition,
         amountTyped: 0,
+        amountWrong: 0,
+        combo,
         lastKeyPressed: '',
         length: definition.length,
         wordCount: definition.split(' ').length,
         timerStart: false,
+        timesUp: false,
       });
       timeBarRef.current.style.transition = `all ${timerLength}s linear`;
     }, 100);
     return () => clearTimeout(timerRef.current);
-  }, [definition, timerLength]);
+  }, [definition, timerLength, combo]);
 
   return (
     <>

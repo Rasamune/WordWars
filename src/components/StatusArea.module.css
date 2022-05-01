@@ -1,0 +1,71 @@
+.status-container {
+  padding: 2rem 5rem 2rem 2rem;
+}
+
+.status-container .totals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 10%;
+}
+
+.status-container .totals div {
+  font-size: 1.25rem;
+  color: #4e5565;
+  text-align: right;
+}
+
+.status-container .totals div span {
+  font-weight: 700;
+  color: rgb(255, 255, 255, 0.75);
+  text-align: right;
+  margin-left: 0.25rem;
+}
+
+.status-container ul {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  height: 90%;
+  max-height: calc(40vh - 5rem);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.status-container ul::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.status-container li {
+  width: 100%;
+  justify-self: end;
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+}
+
+.status-container li .word {
+  font-weight: 700;
+  color: #4e5565;
+}
+
+.status-container li .score {
+  text-align: right;
+  color: rgb(132, 194, 132);
+}
+
+.status-container li .score span {
+  font-weight: 700;
+}
+
+.status-container li .mistakes {
+  text-align: right;
+  font-weight: 700;
+  color: rgb(196, 75, 75);
+}
+
+.status-container li .combo {
+  text-align: right;
+  font-weight: 700;
+  color: rgb(255, 255, 255, 0.75);
+}

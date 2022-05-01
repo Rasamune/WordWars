@@ -12,51 +12,44 @@
   overflow: hidden;
 }
 
+.main .gameover-container {
+  display: flex;
+  height: 40vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #4e5565;
+}
+
+.main .gameover {
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+.main .results {
+  font-size: 2rem;
+}
+
+.main .results span {
+  font-weight: 700;
+  color: rgb(255, 255, 255, 0.75);
+}
+
+.main .results span.score {
+  color: rgb(132, 194, 132);
+}
+
+.main .continue {
+  margin-top: 3rem;
+  font-size: 1.5rem;
+}
+
+.main .continue span {
+  font-weight: 700;
+}
+
 .play-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 40vh;
-}
-
-.left-column {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 2rem;
-}
-
-.left-column .level {
-  font-weight: 700;
-  color: #4e5565;
-  font-size: 3rem;
-}
-
-.left-column .card {
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 2rem;
-  background-color: #282c34;
-  border-radius: 15px;
-  transform: translateY(-100%);
-  transition: all 0.5s ease-out;
-}
-
-.left-column .card.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.left-column .card.showing {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.left-column .card .word {
-  font-size: 1.75rem;
 }

@@ -1,0 +1,46 @@
+.highscores-container {
+  height: calc(40vh - 2rem);
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.highscores-container div {
+  background-color: #0d0e14;
+  border-radius: 15px;
+}
+
+.highscores-container h1 {
+  font-size: 1rem;
+  text-align: center;
+  color: #4e5565;
+}
+
+.highscores-container ul {
+  overflow: hidden;
+}
+
+.highscores-container li {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.25fr;
+  margin: 0 1rem;
+}
+
+.highscores-container li div {
+  font-weight: 700;
+  color: #4e5565;
+}
+
+.highscores-container li div span {
+  color: rgb(255, 255, 255, 0.75);
+}
+
+.highscores-container li .score span {
+  color: rgb(132, 194, 132);
+}
+
+.highscores-container li .wpm,
+.highscores-container li .score {
+  text-align: right;
+}

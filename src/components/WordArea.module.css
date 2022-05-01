@@ -1,0 +1,42 @@
+.card-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.card-container .level {
+  font-weight: 700;
+  color: #4e5565;
+  font-size: 3rem;
+}
+
+.card-container .card {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+  background-color: #282c34;
+  border-radius: 15px;
+  transform: translateY(-100%);
+  transition: all 0.5s ease-out;
+}
+
+.card-container .card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-container .card.showing {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-container .card .word {
+  font-size: 1.75rem;
+}
