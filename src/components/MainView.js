@@ -40,6 +40,7 @@ const MainView = () => {
       words: [],
     },
     combo: -1,
+    hearts: 15,
     difficulty: 'normal',
     gameOver: false,
     newGame: true,
@@ -66,6 +67,7 @@ const MainView = () => {
   };
 
   const getNewDefinitionHandler = prevLevelObject => {
+    console.log(prevLevelObject.remainingHearts);
     setGameState(prevState => ({
       ...prevState,
       definition: {
@@ -86,6 +88,7 @@ const MainView = () => {
           },
         ],
       },
+      hearts: prevLevelObject.remainingHearts,
       combo: prevLevelObject.combo,
     }));
     setTimeout(() => {
@@ -189,6 +192,7 @@ const MainView = () => {
             totalWPM: 0,
           },
           combo: -1,
+          hearts: 15,
           difficulty: gameState.difficulty,
           gameOver: false,
           newGame: true,

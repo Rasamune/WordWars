@@ -62,3 +62,21 @@
 .type-timer .time-bar.enter-done {
   transform: translateX(-100%);
 }
+
+.type-hearts {
+  padding: 0 12rem;
+}
+
+.type-hearts ul {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 0.25rem;
+}
+
+.type-hearts path {
+  fill: rgb(196, 75, 75);
+}
+
+.type-hearts .empty path {
+  fill: #0d0e14;
+}

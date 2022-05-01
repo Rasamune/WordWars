@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { ReactComponent as Heart } from '../svg/red-heart.svg';
 import InvalidKeys from '../data/invalid-keys.json';
 import classes from './TypingArea.module.css';
 
@@ -10,6 +11,7 @@ const TypingArea = props => {
   const combo = props.gameState.combo;
   const invalidKeys = InvalidKeys;
   const difficulty = props.gameState.difficulty;
+  const hearts = props.gameState.hearts;
   const timeBarRef = useRef();
   const timerRef = useRef();
   const timerStartTimer = useRef();
@@ -24,13 +26,14 @@ const TypingArea = props => {
     length: definition.length,
     timerStart: false,
     timesUp: false,
+    hearts,
   });
 
   let timerLength = typedLetters.length / (2 + level * 0.1);
   if (difficulty === 'challenger')
     timerLength = typedLetters.length / (2 + level * 0.25);
   if (difficulty === 'easy')
-    timerLength = typedLetters.length / (1 + level * 0.1);
+    timerLength = typedLetters.length / (1.5 + level * 0.05);
 
   const definitionDisplay = () => (
     <>
@@ -76,11 +79,14 @@ const TypingArea = props => {
 
   const definitionCompleted = useCallback(() => {
     const scores = calculateScores();
+    const remainingHearts = typedLetters.hearts;
+    console.log(remainingHearts);
     console.log('--- SENTENCE COMPLETED ---');
-    props.onComplete({ word, ...scores });
-  }, [calculateScores, props, word]);
+    props.onComplete({ word, remainingHearts, ...scores });
+  }, [calculateScores, props, word, typedLetters]);
 
   const definitionFailed = useCallback(() => {
+    clearTimeout(timerRef.current);
     console.log('failed');
     setTimeout(() => {
       props.onFail();
@@ -150,23 +156,64 @@ const TypingArea = props => {
         }
 
         if (wrongKey === '' && !invalidKeys.includes(e.key)) {
-          const typedWrong = typedLetters.remaining.slice(0, 1);
-          const remaining = typedLetters.remaining.slice(1);
-          setTypedLetters(prevState => ({
-            ...prevState,
-            typedWrong,
-            remaining,
-            lastKeyPressed: e.key,
-            timerStart: true,
-            amountWrong: typedLetters.amountWrong + 1,
-          }));
+          if (typedLetters.hearts !== 1) {
+            const typedWrong = typedLetters.remaining.slice(0, 1);
+            const remaining = typedLetters.remaining.slice(1);
+            setTypedLetters(prevState => ({
+              ...prevState,
+              typedWrong,
+              remaining,
+              lastKeyPressed: e.key,
+              timerStart: true,
+              amountWrong: typedLetters.amountWrong + 1,
+              hearts: typedLetters.hearts - 1,
+            }));
 
-          if (!typedLetters.timerStart) startWordTimer();
+            if (!typedLetters.timerStart) startWordTimer();
+          }
+          if (typedLetters.hearts === 1) {
+            setTypedLetters(prevState => ({
+              ...prevState,
+              typedRight: '',
+              typedWrong: definition,
+              remaining: '',
+              timesUp: true,
+              hearts: 0,
+            }));
+            definitionFailed();
+          }
         }
       }
     },
-    [startWordTimer, definitionCompleted, typedLetters, invalidKeys]
+    [
+      startWordTimer,
+      definitionCompleted,
+      definitionFailed,
+      typedLetters,
+      invalidKeys,
+      definition,
+    ]
   );
+
+  const getHearts = () => {
+    const heartContainer = [];
+    const remaining = 15 - typedLetters.hearts;
+    for (let i = 0; i < typedLetters.hearts; i++) {
+      heartContainer.push(
+        <li key={`heart${i}`}>
+          <Heart />
+        </li>
+      );
+    }
+    for (let i = 0; i < remaining; i++) {
+      heartContainer.push(
+        <li key={`empty${i}`} className={classes.empty}>
+          <Heart />
+        </li>
+      );
+    }
+    return heartContainer;
+  };
 
   useEffect(() => {
     document.addEventListener('keydown', keydownHandler);
@@ -189,11 +236,12 @@ const TypingArea = props => {
         wordCount: definition.split(' ').length,
         timerStart: false,
         timesUp: false,
+        hearts,
       });
       timeBarRef.current.style.transition = `all ${timerLength}s linear`;
     }, 100);
     return () => clearTimeout(timerRef.current);
-  }, [definition, timerLength, combo]);
+  }, [definition, timerLength, combo, hearts]);
 
   return (
     <>
@@ -215,6 +263,11 @@ const TypingArea = props => {
           <div className={classes['time-bar']} ref={timeBarRef}></div>
         </CSSTransition>
       </div>
+      {difficulty === 'challenger' && (
+        <div className={classes['type-hearts']}>
+          <ul>{getHearts()}</ul>
+        </div>
+      )}
     </>
   );
 };
