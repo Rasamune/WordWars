@@ -38,8 +38,6 @@ const MainView = () => {
     levelStart: false,
     wordScores: {
       words: [],
-      totalScore: 0,
-      totalWPM: 0,
     },
     combo: -1,
     difficulty: 'normal',
@@ -115,20 +113,20 @@ const MainView = () => {
         );
         const data = await result.json();
         const fetchedDefinition = data[0].meanings[0].definitions[0].definition
-          .trim()
-          .normalize('NFD') // Remove accents from chars
           .replace('’', "'") // Replace special apostrophe
           .replace('·', '-') // Replace dot with dash
           .replace(/\.+$/, '') // Remove period from end of sentence
-          .replace(/[\u0300-\u036f]/g, ''); // Remove leftover accents from the normalize
+          .trim();
 
         const tooManyCharacters = fetchedDefinition.length > 200;
         const containsFilteredWord = wordFilter.some(word =>
           fetchedDefinition.includes(word)
         );
+        const containsASCIIChars = /^[ -~]+$/.test(fetchedDefinition);
+
         console.log(`Definition is: ${fetchedDefinition}`);
 
-        if (!containsFilteredWord && !tooManyCharacters) {
+        if (!containsFilteredWord && !tooManyCharacters && containsASCIIChars) {
           setGameState(prevState => ({
             ...prevState,
             definition: {
