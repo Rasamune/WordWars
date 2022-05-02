@@ -156,7 +156,7 @@ const TypingArea = props => {
         }
 
         if (wrongKey === '' && !invalidKeys.includes(e.key)) {
-          if (typedLetters.hearts !== 1) {
+          if (typedLetters.hearts !== 1 || difficulty !== 'challenger') {
             const typedWrong = typedLetters.remaining.slice(0, 1);
             const remaining = typedLetters.remaining.slice(1);
             setTypedLetters(prevState => ({
@@ -171,7 +171,7 @@ const TypingArea = props => {
 
             if (!typedLetters.timerStart) startWordTimer();
           }
-          if (typedLetters.hearts === 1) {
+          if (typedLetters.hearts === 1 && difficulty === 'challenger') {
             setTypedLetters(prevState => ({
               ...prevState,
               typedRight: '',
@@ -192,6 +192,7 @@ const TypingArea = props => {
       typedLetters,
       invalidKeys,
       definition,
+      difficulty,
     ]
   );
 
